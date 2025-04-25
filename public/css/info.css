@@ -1,0 +1,222 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    margin-top: 10px;
+    gap: 20px;
+}
+
+.sidebar {
+    position: sticky;
+    top : 10px;
+    width: 300px;
+    height: fit-content;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour le menu */
+}
+
+.content {
+    width: 75%;
+    height: fit-content;
+    padding: 20px 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour le menu */
+    margin-left: inherit;
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    color: #333;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+h3 {
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+p {
+    margin-bottom: 20px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+.nav-side ul {
+    list-style: none;
+    flex-direction: column;
+}
+
+.nav-side li {
+    display: block;
+    margin-right: 10px;
+    margin-bottom: 15px;
+}
+
+.nav-side a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+}
+
+.nav-side a:hover {
+    background-color: #f3f3f3;
+}
+
+.nav-side .active{
+    background-color: #f3f3f3;
+    color: black;
+}
+
+/* Style spécifique pour le menu vertical */
+.nav-side {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-side li {
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Media Queries */
+
+/* Tablettes (paysage) */
+@media screen and (max-width: 1024px) {
+    .sidebar {
+        width: 190px; /* Réduire la largeur de la sidebar */
+        padding: 10px;
+    }
+
+    .content {
+        margin-left: 20px; /* Ajuster la marge gauche du contenu */
+        padding: 20px; /* Réduire légèrement le padding */
+    }
+
+    .container {
+        max-width: 960px; /* Limiter la largeur maximale du conteneur */
+        margin: 0 auto; /* Centrer le conteneur */
+        gap: 0;
+        margin-top: 10px;
+    }
+    .nav-side a {
+        display: flex;
+        text-overflow: clip;
+    }
+
+    .nav-side li {
+        margin: 2px 0;
+    }
+
+}
+
+/* Tablettes (portrait) */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 180px;
+    }
+
+    .content {
+        margin-left: 18px;
+        padding: 15px 20px;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+}
+
+/* Smartphones (paysage) */
+@media screen and (max-width: 576px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: sticky;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .nav-side ul {
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 10px;
+    }
+
+    .nav-side li {
+        margin-right: 15px;
+    }
+}
+
+/* Smartphones (portrait) */
+@media screen and (max-width: 375px) {
+    .content {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .nav-side ul {
+        flex-direction: column;
+    }
+
+    .nav-side li {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/* Pour les très petits écrans */
+@media screen and (max-width: 320px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}

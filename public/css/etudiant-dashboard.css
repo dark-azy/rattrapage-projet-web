@@ -1,0 +1,164 @@
+/* Etudiant Dashboard Styles */
+
+/* Statistics Cards */
+.stats-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+
+.stats-card h5 {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.stats-card h2 {
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.stats-card i {
+    opacity: 0.8;
+}
+
+.stats-card .text-muted {
+    font-size: 0.85rem;
+}
+
+/* Charts Section */
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 300px;
+}
+
+/* Search and Filter Section */
+.search-section {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-section .form-control,
+.search-section .form-select {
+    border: 1px solid #e9ecef;
+    transition: all 0.3s;
+}
+
+.search-section .form-control:focus,
+.search-section .form-select:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* Data Tables */
+.data-table {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-tabs .nav-link {
+    color: #6c757d;
+    padding: 10px 20px;
+    transition: all 0.3s;
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #2c3e50;
+    border-bottom: 2px solid #4e73df;
+}
+
+.nav-tabs .nav-link.active {
+    color: #4e73df;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid #4e73df;
+    background: transparent;
+}
+
+/* Table Styles */
+.table {
+    margin-top: 15px;
+}
+
+.table thead th {
+    border-top: none;
+    border-bottom: 2px solid #e9ecef;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.action-buttons .btn {
+    margin: 0 2px;
+    transition: all 0.2s;
+    padding: 0.25rem 0.5rem;
+}
+
+.action-buttons .btn:hover {
+    transform: scale(1.1);
+}
+
+.action-buttons .btn i {
+    margin: 0;
+}
+
+/* Status Badges */
+.badge {
+    padding: 6px 10px;
+    font-weight: 500;
+    border-radius: 30px;
+}
+
+.badge.bg-success {
+    background-color: #1cc88a !important;
+}
+
+.badge.bg-warning {
+    background-color: #f6c23e !important;
+}
+
+.badge.bg-danger {
+    background-color: #e74a3b !important;
+}
+
+/* DataTables Customization */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 15px;
+}
+
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 15px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #4e73df !important;
+    border-color: #4e73df !important;
+    color: #fff !important;
+    border-radius: 5px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #0b5ed7 !important;
+    border-color: #0b5ed7 !important;
+    color: #fff !important;
+} 

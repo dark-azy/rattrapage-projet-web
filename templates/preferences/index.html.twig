@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Préférences - Interned{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/preferences.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="preferences-container">
+        <div class="sidebar">
+            <h2>Paramètres</h2>
+            <ul class="sidebar-menu">
+                <li><a data-section="general" class="active">Paramètres Généraux</a></li>
+                <li><a data-section="langue">Paramètres de Langue</a></li>
+                <li><a data-section="communication">Préférences de communication</a></li>
+                <li><a data-section="cookies">Gestion des cookies</a></li>
+                <li><a data-section="compte">Compte</a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a data-section="admin">Paramètres administrateur</a></li>
+                {% endif %}
+                {% if is_granted('ROLE_PILOTE') %}
+                    <li><a data-section="pilote">Paramètres pilote</a></li>
+                {% endif %}
+                {% if is_granted('ROLE_ETUDIANT') %}
+                    <li><a data-section="etudiant">Paramètres étudiant</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="content">
+            <div id="general" class="settings-section active">
+                <h1>Paramètres Généraux</h1>
+                <div class="form-group">
+                    <label for="theme">Thème</label>
+                    <select id="theme" class="form-control">
+                        <option value="light">Clair</option>
+                        <option value="dark">Sombre</option>
+                        <option value="auto">Automatique</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notifications">Notifications</label>
+                    <select id="notifications" class="form-control">
+                        <option value="all">Toutes les notifications</option>
+                        <option value="important">Notifications importantes uniquement</option>
+                        <option value="none">Aucune notification</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="langue" class="settings-section">
+                <h1>Paramètres de Langue</h1>
+                <div class="form-group">
+                    <label for="language">Langue de l'interface</label>
+                    <select id="language" class="form-control">
+                        <option value="fr">Français</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="communication" class="settings-section">
+                <h1>Préférences de communication</h1>
+                <div class="form-group">
+                    <label for="email-frequency">Fréquence des emails</label>
+                    <select id="email-frequency" class="form-control">
+                        <option value="immediate">Immédiat</option>
+                        <option value="daily">Résumé quotidien</option>
+                        <option value="weekly">Résumé hebdomadaire</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="cookies" class="settings-section">
+                <h1>Gestion des cookies</h1>
+                <div class="form-group">
+                    <label for="cookie-preferences">Préférences des cookies</label>
+                    <select id="cookie-preferences" class="form-control">
+                        <option value="essential">Cookies essentiels uniquement</option>
+                        <option value="all">Tous les cookies</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="compte" class="settings-section">
+                <h1>Compte</h1>
+                <div class="form-group">
+                    <label for="email-visibility">Visibilité de l'email</label>
+                    <select id="email-visibility" class="form-control">
+                        <option value="public">Public</option>
+                        <option value="private">Privé</option>
+                    </select>
+                </div>
+            </div>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <div id="admin" class="settings-section">
+                    <h1>Paramètres Administrateur</h1>
+                    <div class="form-group">
+                        <label for="dashboard">Tableau de bord par défaut</label>
+                        <select id="dashboard" class="form-control">
+                            <option value="overview">Vue d'ensemble</option>
+                            <option value="users">Gestion des utilisateurs</option>
+                            <option value="offers">Gestion des offres</option>
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_PILOTE') %}
+                <div id="pilote" class="settings-section">
+                    <h1>Paramètres Pilote</h1>
+                    <div class="form-group">
+                        <label for="student-notifications">Notifications étudiants</label>
+                        <select id="student-notifications" class="form-control">
+                            <option value="all">Tous les étudiants</option>
+                            <option value="assigned">Étudiants assignés uniquement</option>
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_ETUDIANT') %}
+                <div id="etudiant" class="settings-section">
+                    <h1>Paramètres Étudiant</h1>
+                    <div class="form-group">
+                        <label for="job-alerts">Alertes offres de stage</label>
+                        <select id="job-alerts" class="form-control">
+                            <option value="instant">Instantanées</option>
+                            <option value="daily">Quotidiennes</option>
+                            <option value="weekly">Hebdomadaires</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cv-visibility">Visibilité du CV</label>
+                        <select id="cv-visibility" class="form-control">
+                            <option value="public">Public</option>
+                            <option value="private">Privé</option>
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+
+            <button class="btn-save">Enregistrer les modifications</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/preferences.js') }}"></script>
+{% endblock %}

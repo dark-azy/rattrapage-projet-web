@@ -1,0 +1,67 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Nouvelle Promotion{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Nouvelle Promotion</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Créer une nouvelle promotion</h6>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.nom, {
+                            'label': 'Nom de la promotion',
+                            'attr': {'class': 'form-control'}
+                        }) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.campus, {
+                            'label': 'Campus',
+                            'attr': {'class': 'form-control'}
+                        }) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.adresse, {
+                            'label': 'Adresse',
+                            'attr': {'class': 'form-control'}
+                        }) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.pilote, {
+                            'label': 'Pilote de promotion',
+                            'attr': {'class': 'form-control'}
+                        }) }}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Créer la promotion
+                    </button>
+                    <a href="{{ path('app_admin_promotions') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Retour à la liste
+                    </a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,234 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        .stats-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #4e73df;
+            margin-bottom: 20px;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-card h5 {
+            color: #4e73df;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .stats-card h2 {
+            color: #5a5c69;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .stats-card .text-muted {
+            font-size: 0.875rem;
+        }
+
+        .stats-card i {
+            opacity: 0.7;
+        }
+
+        /* Couleurs spécifiques pour chaque carte */
+        .stats-card.candidatures {
+            border-left-color: #4e73df;
+        }
+        .stats-card.candidatures i {
+            color: #4e73df;
+        }
+
+        .stats-card.entretiens {
+            border-left-color: #1cc88a;
+        }
+        .stats-card.entretiens i {
+            color: #1cc88a;
+        }
+
+        .stats-card.offres {
+            border-left-color: #36b9cc;
+        }
+        .stats-card.offres i {
+            color: #36b9cc;
+        }
+
+        .stats-card.wishlist {
+            border-left-color: #e74a3b;
+        }
+        .stats-card.wishlist i {
+            color: #e74a3b;
+        }
+
+        /* Style pour les graphiques */
+        .card {
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #4e73df;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid p-4">
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card candidatures">
+                <h5>Candidatures</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ stats.candidatures }}</h2>
+                    <i class="fas fa-paper-plane fa-2x"></i>
+                </div>
+                <div class="mt-2 text-muted">
+                    <span class="text-success">
+                        <i class="fas fa-arrow-up"></i> {{ stats.candidatures_percent|default(0) }}%
+                    </span>
+                    depuis le mois dernier
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card entretiens">
+                <h5>Entretiens</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ stats.entretiens }}</h2>
+                    <i class="fas fa-calendar-check fa-2x"></i>
+                </div>
+                <div class="mt-2 text-muted">
+                    <span class="text-success">
+                        <i class="fas fa-calendar"></i>
+                    </span>
+                    Prochains rendez-vous
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card offres">
+                <h5>Offres disponibles</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ stats.offresDisponibles }}</h2>
+                    <i class="fas fa-briefcase fa-2x"></i>
+                </div>
+                <div class="mt-2 text-muted">
+                    <span class="text-info">
+                        <i class="fas fa-sync"></i>
+                    </span>
+                    Mises à jour aujourd'hui
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card wishlist">
+                <h5>Wishlist</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ stats.wishlist }}</h2>
+                    <i class="fas fa-heart fa-2x"></i>
+                </div>
+                <div class="mt-2 text-muted">
+                    <span class="text-danger">
+                        <i class="fas fa-star"></i>
+                    </span>
+                    Offres favorites
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Statut des candidatures</h5>
+                    <canvas id="candidatureStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Offres par secteur</h5>
+                    <canvas id="sectorChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        // Calcul des statistiques pour le graphique des candidatures
+        const statuts = {
+            'En attente': {{ candidatures|filter(c => c.statut == 'En attente')|length }},
+            'Acceptée': {{ candidatures|filter(c => c.statut == 'Acceptée')|length }},
+            'Refusée': {{ candidatures|filter(c => c.statut == 'Refusée')|length }},
+            'Entretien': {{ candidatures|filter(c => c.statut == 'Entretien')|length }}
+        };
+
+        // Graphique du statut des candidatures
+        new Chart(document.getElementById('candidatureStatusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(statuts),
+                datasets: [{
+                    data: Object.values(statuts),
+                    backgroundColor: ['#f6c23e', '#1cc88a', '#e74a3b', '#4e73df']
+                }]
+            }
+        });
+
+        // Graphique des secteurs
+        new Chart(document.getElementById('sectorChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Offres disponibles'],
+                datasets: [{
+                    label: 'Nombre d\'offres',
+                    data: [{{ stats.offresDisponibles }}],
+                    backgroundColor: '#4e73df'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Initialisation des DataTables
+        $(document).ready(function() {
+            $('.table').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json'
+                }
+            });
+        });
+    </script>
+{% endblock %} 

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un étudiant{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/user_creation.css') }}">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Créer un nouvel étudiant</h1>
+
+        {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.nom_etudiant) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.prenom_etudiant) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.email) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.password) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.promotion) }}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Créer l'étudiant</button>
+            <a href="{{ path('app_users') }}" class="btn btn-secondary">Retour</a>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
