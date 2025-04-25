@@ -1,0 +1,50 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Créer un utilisateur{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Créer un utilisateur</h1>
+        
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-graduate fa-3x mb-3 text-success"></i>
+                        <h5 class="card-title">Étudiant</h5>
+                        <p class="card-text">Créer un compte étudiant avec accès aux offres de stage et candidatures.</p>
+                        <a href="{{ path('app_etudiant_new') }}" class="btn btn-success">
+                            <i class="fas fa-plus me-1"></i> Créer un étudiant
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-tie fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">Pilote</h5>
+                        <p class="card-text">Créer un compte pilote pour gérer les promotions et suivre les étudiants.</p>
+                        <a href="{{ path('app_pilote_new') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i> Créer un pilote
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-shield fa-3x mb-3 text-danger"></i>
+                        <h5 class="card-title">Administrateur</h5>
+                        <p class="card-text">Créer un compte administrateur avec tous les droits de gestion.</p>
+                        <a href="{{ path('app_admin_new') }}" class="btn btn-danger">
+                            <i class="fas fa-plus me-1"></i> Créer un administrateur
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

@@ -1,0 +1,37 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Nouvelle offre de stage{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Créer une nouvelle offre</h3>
+            </div>
+            <div class="card-body">new.html.twig
+                {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.titre_offre) }}
+                            {{ form_row(form.entreprise) }}
+                            {{ form_row(form.pilote) }}
+                            {{ form_row(form.duree_stage) }}
+                            {{ form_row(form.salaire) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.statut_offre) }}
+                            {{ form_row(form.description_offre) }}
+                            {{ form_row(form.competences_requises) }}
+                            {{ form_row(form.date_debut_stage) }}
+                            {{ form_row(form.date_fin_stage) }}
+                        </div>
+                    </div>
+                    <div class="text-end mt-3">
+                        <a href="{{ path('app_offres_stage') }}" class="btn btn-secondary me-2">Retour à la liste</a>
+                        <button type="submit" class="btn btn-primary">Créer l'offre</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %} 

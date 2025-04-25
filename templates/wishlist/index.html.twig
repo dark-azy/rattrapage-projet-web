@@ -1,0 +1,236 @@
+{# templates/wishlist/index.html.twig #}
+    {% extends 'base.html.twig' %}
+
+    {% block title %}Wishlist - Interned{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/wishlist.css') }}">
+    <style>
+        /* Styles pour la modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 50%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 10000;
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        .close-modal:hover {
+            color: #000;
+        }
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .modal-section {
+            margin-bottom: 20px;
+        }
+        .modal-section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .modal-section p {
+            color: #34495e;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .wishlist-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .wishlist-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="wishlist-container">
+        <h1>Ma Wishlist</h1>
+
+        <div class="wishlist-items">
+            {% for offre in offres|default([]) %}
+                <div class="wishlist-card"
+                     data-id="{{ offre.id }}"
+                     data-title="{{ offre.titreOffre }}"
+                     data-company="{{ offre.entreprise.nom }}"
+                     data-description="{{ offre.descriptionOffre }}"
+                     data-skills="{{ offre.competencesRequises }}"
+                     data-duration="{{ offre.dureeStage }}"
+                     data-start-date="{{ offre.dateDebutStage|date('d/m/Y') }}"
+                     data-end-date="{{ offre.dateFinStage|date('d/m/Y') }}"
+                     data-salary="{{ offre.salaire }}"
+                     data-address="{{ offre.entreprise.adresse.rue }}, {{ offre.entreprise.adresse.ville }}, {{ offre.entreprise.adresse.codePostal }}">
+                    <div class="card-image">
+                        <img src="{{ asset('images/placeholder.png') }}" alt="Logo entreprise">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">{{ offre.titreOffre }}</h3>
+                        <p class="card-description">{{ offre.descriptionOffre }}</p>
+                    </div>
+                    <button class="wishlist-btn" title="Retirer de la wishlist" data-offer-id="{{ offre.id }}">
+                        ❤️
+                    </button>
+                </div>
+            {% else %}
+                <div class="empty-wishlist">
+                    <p>Votre wishlist est vide</p>
+                    <a href="{{ path('app_annonces') }}" class="browse-offers-btn">Parcourir les offres</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# Modal pour les détails de l'offre #}
+    <div id="offerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <p id="modalCompany"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Description</h3>
+                <p id="modalDescription"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Compétences requises</h3>
+                <p id="modalSkills"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Détails du stage</h3>
+                <p id="modalDetails"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Entreprise</h3>
+                <p id="modalCompanyDetails"></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('offerModal');
+
+            // Fonction pour ouvrir la modal avec les détails de l'offre
+            function openModal(card) {
+                document.getElementById('modalTitle').textContent = card.dataset.title;
+                document.getElementById('modalCompany').textContent = card.dataset.company;
+                document.getElementById('modalDescription').textContent = card.dataset.description;
+                document.getElementById('modalSkills').textContent = card.dataset.skills;
+
+                // Formatage des détails du stage
+                var details = `
+                    Durée : ${card.dataset.duration} mois<br>
+                    Date de début : ${card.dataset.startDate}<br>
+                    Date de fin : ${card.dataset.endDate}<br>
+                    Salaire : ${card.dataset.salary}€ par mois
+                `;
+                document.getElementById('modalDetails').innerHTML = details;
+
+                // Détails de l'entreprise
+                document.getElementById('modalCompanyDetails').innerHTML = `
+                    ${card.dataset.company}<br>
+                    Adresse : ${card.dataset.address}
+                `;
+
+                modal.style.display = 'block';
+            }
+
+            // Fonction pour fermer la modal
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+
+            // Fermer la modal en cliquant sur la croix
+            document.querySelector('.close-modal').onclick = closeModal;
+
+            // Fermer la modal en cliquant en dehors
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+
+            // Ajouter l'événement de clic sur les cartes
+            document.querySelectorAll('.wishlist-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Ne pas ouvrir la modal si on clique sur le bouton wishlist
+                    if (!e.target.closest('.wishlist-btn')) {
+                        openModal(this);
+                    }
+                });
+            });
+
+            // Gestion des boutons wishlist
+            document.querySelectorAll('.wishlist-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Empêcher la propagation du clic
+                    const offerId = this.dataset.offerId;
+                    const card = this.closest('.wishlist-card');
+
+                    fetch('/wishlist/remove/' + offerId, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Animation de suppression
+                                card.style.transition = 'all 0.3s ease';
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateX(100px)';
+
+                                setTimeout(() => {
+                                    card.remove();
+
+                                    // Vérifier s'il reste des offres
+                                    const remainingCards = document.querySelectorAll('.wishlist-card');
+                                    if (remainingCards.length === 0) {
+                                        const emptyWishlist = document.createElement('div');
+                                        emptyWishlist.className = 'empty-wishlist';
+                                        emptyWishlist.innerHTML = `
+                                        <p>Votre wishlist est vide</p>
+                                        <a href="{{ path('app_annonces') }}" class="browse-offers-btn">Parcourir les offres</a>
+                                    `;
+                                        document.querySelector('.wishlist-items').appendChild(emptyWishlist);
+                                    }
+                                }, 300);
+                            }
+                        });
+                });
+            });
+        });
+    </script>
+{% endblock %}

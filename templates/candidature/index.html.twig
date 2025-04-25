@@ -1,0 +1,230 @@
+{# templates/candidature/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidatures - Interned{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="{{ asset('css/candidature.css') }}">
+    <style>
+        /* Styles pour la modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 50%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 10000;
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        .close-modal:hover {
+            color: #000;
+        }
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .modal-section {
+            margin-bottom: 20px;
+        }
+        .modal-section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .modal-section p {
+            color: #34495e;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .view-btn {
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            min-width: 40px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e3f2fd;
+            border: none;
+            cursor: pointer;
+            color: #1976d2;
+            transition: all 0.2s;
+        }
+        .view-btn:hover {
+            background-color: #1976d2;
+            color: white;
+            transform: translateY(-1px);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="candidatures-container">
+        <div class="header">
+            <h1>Candidatures</h1>
+            <div class="filters">
+                <button class="filter-btn accepted">Acceptées</button>
+                <button class="filter-btn pending">En cours</button>
+                <button class="filter-btn refused">Refusée</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="applications-list">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Rechercher une candidature...">
+                    <button class="search-btn">
+                        🔍
+                    </button>
+                </div>
+                {% for candidature in candidatures|default([]) %}
+                    <div class="application-card"
+                         data-lat="{{ candidature.offreDeStage.entreprise.adresse.latitude }}"
+                         data-lng="{{ candidature.offreDeStage.entreprise.adresse.longitude }}"
+                         data-id="{{ candidature.offreDeStage.id }}"
+                         data-title="{{ candidature.offreDeStage.titreOffre }}"
+                         data-company="{{ candidature.offreDeStage.entreprise.nom }}"
+                         data-description="{{ candidature.offreDeStage.descriptionOffre }}"
+                         data-skills="{{ candidature.offreDeStage.competencesRequises }}"
+                         data-duration="{{ candidature.offreDeStage.dureeStage }}"
+                         data-start-date="{{ candidature.offreDeStage.dateDebutStage|date('d/m/Y') }}"
+                         data-end-date="{{ candidature.offreDeStage.dateFinStage|date('d/m/Y') }}"
+                         data-salary="{{ candidature.offreDeStage.salaire }}"
+                         data-address="{{ candidature.offreDeStage.entreprise.adresse.rue }}, {{ candidature.offreDeStage.entreprise.adresse.ville }}, {{ candidature.offreDeStage.entreprise.adresse.codePostal }}">
+                        <div class="application-image">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="application-details">
+                            <div class="application-title">{{ candidature.offreDeStage.titreOffre }}</div>
+                            <div class="application-description">{{ candidature.offreDeStage.descriptionOffre }}</div>
+                            <div class="status-badge {{ candidature.statut|lower }}">
+                                {{ candidature.statut }}
+                            </div>
+                        </div>
+                        <button class="view-btn" title="Voir les détails">
+                            👁️
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="no-applications">
+                        Aucune candidature trouvée.
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    {# Modal pour les détails de l'offre #}
+    <div id="offerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <p id="modalCompany"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Description</h3>
+                <p id="modalDescription"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Compétences requises</h3>
+                <p id="modalSkills"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Détails du stage</h3>
+                <p id="modalDetails"></p>
+            </div>
+            <div class="modal-section">
+                <h3>Entreprise</h3>
+                <p id="modalCompanyDetails"></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{{ asset('js/candidature.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('offerModal');
+
+            // Fonction pour ouvrir la modal avec les détails de l'offre
+            function openModal(card) {
+                document.getElementById('modalTitle').textContent = card.dataset.title;
+                document.getElementById('modalCompany').textContent = card.dataset.company;
+                document.getElementById('modalDescription').textContent = card.dataset.description;
+                document.getElementById('modalSkills').textContent = card.dataset.skills;
+
+                // Formatage des détails du stage
+                var details = `
+                    Durée : ${card.dataset.duration} mois<br>
+                    Date de début : ${card.dataset.startDate}<br>
+                    Date de fin : ${card.dataset.endDate}<br>
+                    Salaire : ${card.dataset.salary}€ par mois
+                `;
+                document.getElementById('modalDetails').innerHTML = details;
+
+                // Détails de l'entreprise
+                document.getElementById('modalCompanyDetails').innerHTML = `
+                    ${card.dataset.company}<br>
+                    Adresse : ${card.dataset.address}
+                `;
+
+                modal.style.display = 'block';
+            }
+
+            // Fonction pour fermer la modal
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+
+            // Fermer la modal en cliquant sur la croix
+            document.querySelector('.close-modal').onclick = closeModal;
+
+            // Fermer la modal en cliquant en dehors
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+
+            // Ajouter les événements de clic sur les boutons de vue
+            document.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Empêcher la propagation du clic
+                    const card = this.closest('.application-card');
+                    openModal(card);
+                });
+            });
+        });
+    </script>
+{% endblock %}

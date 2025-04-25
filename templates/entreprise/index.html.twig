@@ -1,0 +1,135 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/entreprise.css') }}">
+{% endblock %}
+
+{% block dashboard_content %}
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <h5>Total Entreprises</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ stats.total }}</h2>
+                    <i class="fas fa-building fa-2x text-primary"></i>
+                </div>
+                <div class="mt-2 text-muted">Toutes les entreprises</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <h5>Entreprises Actives</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ stats.actives }}</h2>
+                    <i class="fas fa-check-circle fa-2x text-success"></i>
+                </div>
+                <div class="mt-2 text-muted">Entreprises en activité</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <h5>Entreprises Inactives</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ stats.inactives }}</h2>
+                    <i class="fas fa-times-circle fa-2x text-danger"></i>
+                </div>
+                <div class="mt-2 text-muted">Entreprises inactives</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="search-section mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Rechercher une entreprise...">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option>Tous les statuts</option>
+                    <option>Actif</option>
+                    <option>Inactif</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option>Tous les secteurs</option>
+                    <option>Technologie</option>
+                    <option>Finance</option>
+                    <option>Santé</option>
+                    <option>Education</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">
+                    <i class="fas fa-filter me-2"></i>Filtrer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="data-table">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Liste des entreprises</h4>
+            <a href="{{ path('app_entreprise_new') }}" class="btn btn-success">
+                <i class="fas fa-plus me-2"></i>Ajouter une entreprise
+            </a>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Secteur</th>
+                    <th>Localisation</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entreprise in entreprises %}
+                    <tr>
+                        <td>{{ entreprise.nom }}</td>
+                        <td>{{ entreprise.secteur }}</td>
+                        <td>{{ entreprise.adresse.ville }}</td>
+                        <td>
+                            <span class="badge bg-{{ entreprise.active ? 'success' : 'danger' }}">
+                                {{ entreprise.active ? 'Actif' : 'Inactif' }}
+                            </span>
+                        </td>
+                        <td class="action-buttons">
+                            <a href="{{ path('app_entreprise_show', {'id': entreprise.id}) }}" class="btn btn-sm btn-info" title="Voir les détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ path('app_entreprise_edit', {'id': entreprise.id}) }}" class="btn btn-sm btn-warning" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form method="post" action="{{ path('app_entreprise_delete', {'id': entreprise.id}) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
+                                <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Initialisation des DataTables
+        $(document).ready(function() {
+            $('.table').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json'
+                }
+            });
+        });
+    </script>
+{% endblock %} 

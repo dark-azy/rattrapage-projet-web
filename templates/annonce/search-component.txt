@@ -1,0 +1,221 @@
+=== COMPOSANTS DE RECHERCHE À INTÉGRER ===
+
+=== 1. TEMPLATE (à mettre dans templates/annonce/index.html.twig) ===
+{# templates/search/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Offres - Interned{% endblock %}
+
+{% block body %}
+    {# Barre de recherche principale #}
+    <div class="search-header">
+        <h1>Annonces</h1>
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <input type="text" id="search-input" placeholder="Rechercher">
+                <img class="search-icon" src="{{ asset('images/Search.svg') }}" alt="Rechercher">
+                {# Overlay #}
+                <div id="search-overlay" class="search-overlay hidden">
+                    <button id="close-overlay">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                    <div class="search-fields">
+                        <div class="search-field">
+                            <label for="quoi">QUOI ?</label>
+                            <input type="text" id="quoi" placeholder="Métier, entreprise, compétence...">
+                        </div>
+                        <div class="search-field">
+                            <label for="ou">OÙ ?</label>
+                            <input type="text" id="ou" placeholder="Ville, département, code postal...">
+                        </div>
+                    </div>
+                    <button id="search-button">Rechercher</button>
+                </div>
+            </div>
+            <div class="view-options">
+                <button class="option-btn active">Default</button>
+                <button class="option-btn">A-Z</button>
+                <button class="option-btn">List view</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/search.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/search.js') }}"></script>
+{% endblock %}
+
+=== 2. CSS (à mettre dans public/css/search.css) ===
+.search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 0 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    width: 500px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+#search-input {
+    border: none;
+    outline: none;
+    padding: 8px 10px 8px 10px;
+    font-size: 14px;
+    width: 400px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 5px;
+    background: none;
+    border: none;
+}
+
+.view-options {
+    display: flex;
+    gap: 10px;
+}
+
+.option-btn {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.option-btn.active {
+    background-color: #0000A3;
+    color: white;
+    border-color: #0000A3;
+}
+
+.search-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: inherit;
+    background-color: #f5f5f5;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-top: 5px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-header {
+    position: relative;
+}
+
+.search-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.search-field label {
+    width: 80px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.search-field input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 30px;
+}
+
+#search-button {
+    width: auto;
+    padding: 10px 20px;
+    background-color: #0000A3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    align-self: flex-start;
+}
+
+#close-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+=== 3. JAVASCRIPT (à mettre dans public/js/search.js) ===
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const searchOverlay = document.getElementById('search-overlay');
+    const closeOverlay = document.getElementById('close-overlay');
+    const clearSearch = document.getElementById('clear-search');
+    const searchButton = document.getElementById('search-button');
+
+    searchInput.addEventListener('click', function() {
+        searchOverlay.style.display = 'flex';
+    });
+
+    closeOverlay.addEventListener('click', function() {
+        searchOverlay.style.display = 'none';
+    });
+
+    clearSearch.addEventListener('click', function() {
+        searchInput.value = '';
+    });
+
+    searchButton.addEventListener('click', function() {
+        // Logique de recherche à implémenter
+        searchOverlay.style.display = 'none';
+    });
+});
+
+=== INSTRUCTIONS D'INTÉGRATION ===
+1. Créer les dossiers nécessaires s'ils n'existent pas :
+   - public/css/
+   - public/js/
+   - templates/annonce/
+
+2. Copier chaque section dans son fichier respectif :
+   - Section 1 → templates/annonce/index.html.twig
+   - Section 2 → public/css/search.css
+   - Section 3 → public/js/search.js
+
+3. Vérifier que l'image Search.svg existe dans public/images/
+
+4. S'assurer que les blocs extends et parent() sont correctement gérés dans le template

@@ -1,0 +1,133 @@
+.search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 0 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    width: 500px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+#search-input {
+    border: none;
+    outline: none;
+    padding: 8px 10px 8px 10px;
+    font-size: 14px;
+    width: 400px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 5px;
+    background: none;
+    border: none;
+}
+
+.view-options {
+    display: flex;
+    gap: 10px;
+}
+
+.option-btn {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.option-btn.active {
+    background-color: #0000A3;
+    color: white;
+    border-color: #0000A3;
+}
+
+.search-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: inherit;
+    background-color: #f5f5f5;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-top: 5px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-header {
+    position: relative; /* Nécessaire pour le positionnement absolu de l'overlay */
+}
+
+.search-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.search-field label {
+    width: 80px; /* Largeur fixe pour tous les labels */
+    font-weight: bold;
+    text-align: left;
+}
+
+.search-field input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 30px;
+}
+
+#search-button {
+    width: auto;
+    padding: 10px 20px;
+    background-color: #0000A3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    align-self: flex-start;
+}
+
+#close-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.search-title{
+    display: flex;
+}
+@media screen and (width<700) {
+    .search-title {
+        display: none;
+    }
+}

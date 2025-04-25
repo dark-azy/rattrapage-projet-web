@@ -1,0 +1,100 @@
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Interned{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <script src="{{ asset('js/profile.js') }}"></script>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="{{ asset('images/logo.png') }}" alt="Interned Logo">
+        <span class="logo-text">Interned</span>
+    </div>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="{{ path('app_home') }}" class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }}">Accueil</a></li>
+            <li><a href="{{ path('app_annonces') }}" class="{{ app.request.get('_route') == 'app_annonces' ? 'active' : '' }}">Annonces</a></li>
+            {% if is_granted('ROLE_ETUDIANT') %}
+                <li><a href="{{ path('app_wishlist') }}" class="{{ app.request.get('_route') == 'app_wishlist' ? 'active' : '' }}">Wishlist</a></li>
+                <li><a href="{{ path('app_candidatures') }}" class="{{ app.request.get('_route') == 'app_candidatures' ? 'active' : '' }}">Candidatures</a></li>
+            {% elseif is_granted('ROLE_PILOTE') %}
+                <li><a href="{{ path('app_candidatures') }}" class="{{ app.request.get('_route') == 'app_candidatures' ? 'active' : '' }}">Candidatures</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="user-profile">
+        <div class="profile-container">
+            {% if app.user.profileImg %}
+                <img src="{{ path('app_profile_image', {'id': app.user.id}) }}" alt="Profil" id="profileIcon">
+            {% else %}
+                <img src="{{ asset('images/user.svg') }}" alt="Profil" id="profileIcon">
+            {% endif %}
+            <img src="{{ asset('images/burger.png') }}" id="burgerIcon">
+            <div class="account-overlay" id="accountOverlay">
+                <div class="burger-links">
+                    <a href="{{ path('app_home') }}" class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }} burger-link">Accueil</a>
+                    <a href="{{ path('app_annonces') }}" class="{{ app.request.get('_route') == 'app_annonces' ? 'active' : '' }} burger-link">Annonces</a>
+                    {% if is_granted('ROLE_ETUDIANT') %}
+                        <a href="{{ path('app_wishlist') }}" class="{{ app.request.get('_route') == 'app_wishlist' ? 'active' : '' }} burger-link">Wishlist</a>
+                    {% endif %}
+                    <a href="{{ path('app_candidatures') }}" class="{{ app.request.get('_route') == 'app_candidatures' ? 'active' : '' }} burger-link">Candidatures</a>
+                </div>
+                <div class="user-info">
+                    {% if app.user.profileImg %}
+                        <img src="{{ path('app_profile_image', {'id': app.user.id}) }}" alt="Avatar" class="user-avatar">
+                    {% else %}
+                        <img src="{{ asset('images/user.svg') }}" alt="Avatar" class="user-avatar">
+                    {% endif %}
+                    <div class="user-details">
+                        {% if app.user %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="user-name">{{ app.user.nomAdmin }} {{ app.user.prenomAdmin }}</div>
+                            {% elseif is_granted('ROLE_PILOTE') %}
+                                <div class="user-name">{{ app.user.nomPilote }} {{ app.user.prenomPilote }}</div>
+                            {% elseif is_granted('ROLE_ETUDIANT') %}
+                                <div class="user-name">{{ app.user.nomEtudiant }} {{ app.user.prenomEtudiant }}</div>
+                            {% endif %}
+                            <div class="user-email">{{ app.user.email }}</div>
+                        {% else %}
+                            <div class="user-name">Non connecté</div>
+                            <div class="user-email">Veuillez vous connecter</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="overlay-links">
+                    <a href="{{ path('app_profile') }}" class="overlay-button">Profil</a>
+                    <a href="{{ path('app_dashboard') }}" class="overlay-link">Tableau de bord</a>
+                    <a href="{{ path('app_preferences') }}" class="overlay-link">Préférences</a>
+                    <a href="{{ path('app_logout') }}" class="overlay-button disconnect">Se déconnecter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    {% block body %}{% endblock %}
+</main>
+
+<footer>
+    <div>
+        <div class="infos">
+            <div>©2025 - Interned.fr</div>
+            <div class="links">
+                <a href="{{ path('app_InfosLegales') }}" class="link">Informations légales</a>
+                <a href="{{ path('app_CGU') }}" class="link">CGU</a>
+                <a href="{{ path('app_InfosConfidential') }}" class="link">Politique de confidentialité</a>
+                <a href="{{ path('app_Help') }}" class="link">Aide et contact</a>
+            </div>
+            <div><img src="{{ asset('images/Logo Youtube.svg') }}"> <img src="{{ asset('images/Logo Instagram.svg') }}"> <img src="{{ asset('images/LinkedIn.svg') }}"> <img src="{{ asset('images/X Logo.svg') }}"></div>
+        </div>
+    </div>
+</footer>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

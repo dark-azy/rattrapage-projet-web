@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/info.css') }}">
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="sidebar">
+        {% block sidebar %}
+            <nav class="nav-side">
+                <ul>
+                    <li><a href="{{ path('app_InfosLegales') }}" class="{{ app.request.get('_route') == 'app_InfosLegales' ? 'active' : '' }}">Informations légales</a></li>
+                    <li><a href="{{ path('app_CGU') }}" class="{{ app.request.get('_route') == 'app_CGU' ? 'active' : '' }}">CGU</a></li>
+                    <li><a href="{{ path('app_InfosConfidential') }}" class="{{ app.request.get('_route') == 'app_InfosConfidential' ? 'active' : '' }}">Politique de confidentialité</a></li>
+                    <li><a href="{{ path('app_Help') }}" class="{{ app.request.get('_route') == 'app_Help' ? 'active' : '' }}">Aide et contact</a></li>
+                </ul>
+            </nav>
+        {% endblock %}
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

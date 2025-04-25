@@ -1,0 +1,351 @@
+/* public/css/styles.css */
+:root {
+    --primary-color: #0000A3;
+    --secondary-color: #f5f5f5;
+    --text-color: #333;
+    --footer-bg: #001242;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+}
+
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li {
+    margin-left: 10px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    color: #000;
+}
+
+.nav-menu a.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.user-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+#profileIcon {
+    display: block;
+}
+
+#burgerIcon {
+    display: none;
+}
+.nav-burger{
+    display: none;
+}
+
+.burger-links{
+    list-style: none;
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+
+}
+
+.burger-link {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    color: black;
+}
+.burger-link:hover {
+    background-color: #f5f5f5;
+}
+.burger-link.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Main Content */
+main {
+    flex: 1 0 auto; /* Cette propriété permet au contenu principal de prendre tout l'espace disponible */
+}
+
+/* Banner */
+.banner-image {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.banner-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* About Section */
+.about-section {
+    margin-bottom: 40px;
+}
+
+.about-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+/* Offers Section */
+.offers-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.offers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.offer-card {
+    display: flex;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.offer-card:hover {
+    transform: translateY(-3px);
+}
+
+.offer-image {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.offer-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.offer-content h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+.offer-content p {
+    margin: 0;
+    color: #666;
+}
+
+/* Footer */
+footer {
+    background-color: var(--footer-bg);
+    color: white;
+    padding: 10px;
+    font-size: 15px;
+    flex-shrink: 0; /* Empêche le info de rétrécir */
+}
+
+footer .link{
+    text-decoration: none;
+    font-size: 15px;
+    color: white;
+}
+footer .link:hover{
+    text-decoration: underline;
+}
+
+footer .infos {
+    display: flex;
+    padding: 0 20px;
+    margin: 5px 0;
+}
+footer .links {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.links a{
+    padding-inline: 20px;
+}
+
+footer img{
+    height: 20px;
+    margin: 0 5px;
+    vertical-align: middle;
+}
+
+/* User Profile Menu */
+.profile-container {
+    position: relative;
+    cursor: pointer;
+}
+/* Account Overlay*/
+
+.account-overlay {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: 220px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.account-overlay.active {
+    display: block;
+}
+
+.user-info {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-details {
+    text-align: left;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.user-email {
+    font-size: 12px;
+    color: #666;
+}
+
+.overlay-links {
+    display: flex;
+    flex-direction: column;
+}
+
+.overlay-link {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.overlay-link:hover {
+    background-color: #f5f5f5;
+}
+
+.overlay-button {
+    text-align: center;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px 15px;
+    padding: 8px 0;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.overlay-button:hover {
+    background-color: #f5f5f5;
+}
+
+.disconnect {
+    color: #d33;
+    border-color: #d33;
+    margin-top: 5px;
+}
+
+@media screen and (width < 700px) {
+    .nav-menu{
+        display: none;
+    }
+    #profileIcon{
+        display: none;
+    }
+    #burgerIcon{
+        display: block;
+    }
+    .nav-burger{
+        display: block;
+    }
+    .burger-links{
+        display: flex;
+    }
+
+}

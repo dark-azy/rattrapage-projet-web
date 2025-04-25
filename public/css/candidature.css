@@ -1,0 +1,364 @@
+.candidatures-container {
+    padding: 20px;
+    height: calc(100vh - 100px);
+}
+.header {
+    margin-bottom: 20px;
+}
+.header h1 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.filter-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+.filter-btn:hover {
+    background-color: #e9ecef;
+}
+.filter-btn.accepted {
+    border-bottom: 2px solid transparent;
+}
+.filter-btn.accepted.active {
+    background-color: #d4edda;
+    color: #155724;
+    border-bottom: 2px solid #28a745;
+}
+.filter-btn.pending {
+    border-bottom: 2px solid transparent;
+}
+.filter-btn.pending.active {
+    background-color: #fff3cd;
+    color: #856404;
+    border-bottom: 2px solid #ffc107;
+}
+.filter-btn.refused {
+    border-bottom: 2px solid transparent;
+}
+.filter-btn.refused.active {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-bottom: 2px solid #dc3545;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    width: 100%;
+}
+.search-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.search-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+.search-btn:hover {
+    transform: scale(1.1);
+}
+.main-content {
+    display: flex;
+    gap: 20px;
+    height: calc(100% - 150px);
+}
+.applications-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.application-card {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 4px solid #e0e0e0;
+}
+.application-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-left-color: #007bff;
+}
+.application-card.highlighted {
+    background-color: #f8f9fa;
+    border-left-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.application-image {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+.application-image i {
+    font-size: 24px;
+    color: #6c757d;
+}
+.application-details {
+    flex: 1;
+}
+.application-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+.application-description {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.status-badge.acceptée {
+    background-color: #d4edda;
+    color: #155724;
+}
+.status-badge.en.attente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+.status-badge.refusée {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+#map {
+    flex: 2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.no-applications {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+/* Assurer que les contrôles de la carte restent au-dessus */
+.leaflet-control-container {
+    z-index: 2;
+}
+
+.candidature-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.candidature-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.candidature-title {
+    font-size: 24px;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.candidature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.candidature-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.candidature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.candidature-card h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.candidature-card p {
+    color: #666;
+    margin: 0 0 15px 0;
+    font-size: 14px;
+}
+
+.candidature-card .company {
+    color: #0d6efd;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.candidature-card .location {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.candidature-card .status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.candidature-card .status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.candidature-card .status.accepted {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.candidature-card .status.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.candidature-card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.candidature-card .tag {
+    background: #e9ecef;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.candidature-card .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.candidature-card .btn-view {
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.candidature-card .btn-view:hover {
+    background: #0b5ed7;
+}
+
+.candidature-card .btn-remove {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.candidature-card .btn-remove:hover {
+    color: #bb2d3b;
+}
+
+.empty-candidature {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.empty-candidature h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.empty-candidature p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.browse-offers-btn {
+    display: inline-block;
+    background: #0d6efd;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.browse-offers-btn:hover {
+    background: #0b5ed7;
+}
+
+/* Animation pour la suppression */
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.candidature-card.removing {
+    animation: slideOut 0.3s ease-out forwards;
+} 
+ 

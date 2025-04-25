@@ -1,0 +1,121 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Offres de stage{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ asset('css/annonces.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ asset('js/annonces.js') }}"></script>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="search-and-map-container">
+        <div class="search-container">
+            <input type="text" id="search-input" class="form-control" placeholder="Rechercher une offre...">
+            <button class="btn btn-primary" onclick="document.getElementById('search-overlay').style.display='block'">
+                Recherche avancée
+            </button>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <div class="offers-list">
+        {% for offre in offres %}
+            <div class="offer-card" 
+                data-id="{{ offre.id }}"
+                data-title="{{ offre.titreOffre }}"
+                data-company="{{ offre.entreprise.nom }}"
+                data-description="{{ offre.description }}"
+                data-skills="{{ offre.competencesRequises }}"
+                data-duration="{{ offre.duree }}"
+                data-start-date="{{ offre.dateDebut|date('d/m/Y') }}"
+                data-end-date="{{ offre.dateFin|date('d/m/Y') }}"
+                data-salary="{{ offre.salaire }}"
+                data-address="{{ offre.entreprise.adresse }}"
+                data-lat="{{ offre.entreprise.adresse.latitude }}"
+                data-lng="{{ offre.entreprise.adresse.longitude }}">
+                
+                <div class="offer-header">
+                    <h3 class="offer-title">{{ offre.titreOffre }}</h3>
+                    <button class="wishlist-btn" data-offer-id="{{ offre.id }}">🤍</button>
+                </div>
+                
+                <div class="offer-company">{{ offre.entreprise.nom }}</div>
+                <div class="offer-description">{{ offre.description|slice(0, 150) }}...</div>
+                
+                <div class="offer-footer">
+                    <div class="offer-location">
+                        <i class="fas fa-map-marker-alt"></i> 
+                        {{ offre.entreprise.adresse }}
+                    </div>
+                    <button class="btn btn-primary view-btn">Voir plus</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Modal de détails de l'offre -->
+    <div id="offerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle"></h2>
+            
+            <div class="modal-section">
+                <h3>Entreprise</h3>
+                <div id="modalCompanyDetails"></div>
+            </div>
+            
+            <div class="modal-section">
+                <h3>Description du stage</h3>
+                <div id="modalDescription"></div>
+            </div>
+            
+            <div class="modal-section">
+                <h3>Compétences requises</h3>
+                <div id="modalSkills"></div>
+            </div>
+            
+            <div class="modal-section">
+                <h3>Détails du stage</h3>
+                <div id="modalDetails"></div>
+            </div>
+            
+            <div class="modal-actions">
+                <button onclick="applyOffer()" class="btn btn-primary">Postuler</button>
+                <button onclick="saveOffer()" class="btn btn-secondary">Enregistrer</button>
+                <button onclick="closeModal()" class="btn btn-light">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de recherche avancée -->
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-overlay-content">
+            <h3>Recherche avancée</h3>
+            
+            <div class="form-group">
+                <label for="quoi">Quoi ?</label>
+                <input type="text" id="quoi" class="form-control" placeholder="Titre, entreprise, description...">
+            </div>
+            
+            <div class="form-group">
+                <label for="ou">Où ?</label>
+                <input type="text" id="ou" class="form-control" placeholder="Ville, région...">
+            </div>
+            
+            <div class="search-overlay-actions">
+                <button id="search-button" class="btn btn-primary">Rechercher</button>
+                <button onclick="document.getElementById('search-overlay').style.display='none'" class="btn btn-light">
+                    Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

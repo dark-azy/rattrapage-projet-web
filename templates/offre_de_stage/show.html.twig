@@ -1,0 +1,69 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Détails de l'offre de stage{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">Détails de l'offre</h3>
+                <div>
+                    <a href="{{ path('app_offres_stage') }}" class="btn btn-secondary me-2">Retour à la liste</a>
+                    <a href="{{ path('app_offre_stage_edit', {'id': offre.id}) }}" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Informations générales</h4>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Titre</th>
+                                    <td>{{ offre.titreOffre }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Entreprise</th>
+                                    <td>{{ offre.entreprise.nom }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Durée</th>
+                                    <td>{{ offre.dureeStage }} semaines</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de début</th>
+                                    <td>{{ offre.dateDebutStage ? offre.dateDebutStage|date('d/m/Y') : 'Non définie' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Statut</th>
+                                    <td>
+                                        <span class="badge {% if offre.statutOffre == 'Disponible' %}bg-success{% else %}bg-warning{% endif %}">
+                                            {{ offre.statutOffre }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Description</h4>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                {{ offre.description|nl2br }}
+                            </div>
+                        </div>
+                        
+                        <h4>Compétences requises</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                {{ offre.competencesRequises|nl2br }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

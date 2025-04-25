@@ -1,0 +1,111 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Gestion des offres de stage{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid">
+        <!-- Statistiques -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total des offres</h5>
+                        <p class="card-text display-6">{{ stats.total }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Offres actives</h5>
+                        <p class="card-text display-6">{{ stats.actives }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Offres inactives</h5>
+                        <p class="card-text display-6">{{ stats.inactives }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau des offres -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">Liste des offres</h3>
+                <a href="{{ path('app_offre_stage_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nouvelle offre
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="offresTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Titre</th>
+                                <th>Entreprise</th>
+                                <th>Durée</th>
+                                <th>Date de début</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for offre in offres %}
+                                <tr>
+                                    <td>{{ offre.id }}</td>
+                                    <td>{{ offre.titreOffre }}</td>
+                                    <td>{{ offre.entreprise.nom }}</td>
+                                    <td>{{ offre.dureeStage }} semaines</td>
+                                    <td>{{ offre.dateDebutStage ? offre.dateDebutStage|date('d/m/Y') : '' }}</td>
+                                    <td>
+                                        <span class="badge {% if offre.statutOffre == 'Disponible' %}bg-success{% else %}bg-warning{% endif %}">
+                                            {{ offre.statutOffre }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ path('app_offre_stage_show', {'id': offre.id}) }}" class="btn btn-info btn-sm" title="Voir">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ path('app_offre_stage_edit', {'id': offre.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{{ path('app_offre_stage_delete', {'id': offre.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ offre.id) }}">
+                                                <button class="btn btn-danger btn-sm" title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center">Aucune offre trouvée</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('#offresTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
+                }
+            });
+        });
+    </script>
+{% endblock %} 
