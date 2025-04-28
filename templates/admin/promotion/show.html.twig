@@ -1,0 +1,96 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Détails de la promotion{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">{{ promotion.nom }}</h3>
+                <div>
+                    <a href="{{ path('app_admin_promotions') }}" class="btn btn-secondary me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                    </a>
+                    <a href="{{ path('app_admin_promotion_edit', {'id': promotion.id}) }}" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4 class="mb-0">Informations générales</h4>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 30%">Nom</th>
+                                            <td>{{ promotion.nom }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Année</th>
+                                            <td>{{ promotion.annee }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date de début</th>
+                                            <td>{{ promotion.dateDebut|date('d/m/Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date de fin</th>
+                                            <td>{{ promotion.dateFin|date('d/m/Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Statut</th>
+                                            <td>
+                                                <span class="badge bg-{{ promotion.active ? 'success' : 'danger' }}">
+                                                    {{ promotion.active ? 'Actif' : 'Inactif' }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="mb-0">Étudiants</h4>
+                            </div>
+                            <div class="card-body">
+                                {% if promotion.etudiants|length > 0 %}
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nom</th>
+                                                    <th>Prénom</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for etudiant in promotion.etudiants %}
+                                                    <tr>
+                                                        <td>{{ etudiant.nom }}</td>
+                                                        <td>{{ etudiant.prenom }}</td>
+                                                        <td>{{ etudiant.email }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <p class="text-muted mb-0">Aucun étudiant dans cette promotion.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
