@@ -1,0 +1,52 @@
+.modal-cgu-overlay {
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-cgu-content {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+    max-width: 700px;
+    width: 90%;
+    padding: 30px 30px 20px 30px;
+    position: relative;
+    max-height: 80vh;
+    overflow: hidden;
+}
+.modal-cgu-close {
+    position: absolute;
+    right: 20px; top: 15px;
+    font-size: 2rem;
+    color: #0000A3;
+    cursor: pointer;
+}
+.modal-cgu-scroll {
+    max-height: 55vh;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+.modal-cgu-btn {
+    background: var(--primary-color, #0000A3);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+.modal-cgu-btn:hover {
+    background: #000080;
+}
+.modal-cgu-message {
+    text-align: center;
+    color: #721c24;
+    margin-bottom: 20px;
+    font-weight: bold;
+} 

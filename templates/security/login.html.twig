@@ -31,4 +31,41 @@
         <button type="submit" class="login-btn">Se connecter</button>
     </form>
 </div>
+
+{% include 'components/modal_cgu.html.twig' %}
+<link rel="stylesheet" href="{{ asset('css/modal_cgu.css') }}">
+<script>
+// Bloquer le formulaire tant que les CGU ne sont pas acceptées
+document.addEventListener('DOMContentLoaded', function() {
+    // Vérifie si l'utilisateur a déjà accepté les CGU
+    if (localStorage.getItem('cguAccepted') === 'true') {
+        document.getElementById('cguModal').style.display = 'none';
+    } else {
+        document.getElementById('cguModal').style.display = 'flex';
+        // Bloque le formulaire
+        document.querySelector('.login-container form').style.pointerEvents = 'none';
+        document.querySelector('.login-container form').style.opacity = '0.5';
+    }
+
+    // Quand l'utilisateur clique sur le bouton d'acceptation
+    document.getElementById('closeCguModalBtn').onclick = function() {
+        localStorage.setItem('cguAccepted', 'true');
+        document.getElementById('cguModal').style.display = 'none';
+        // Débloque le formulaire
+        document.querySelector('.login-container form').style.pointerEvents = 'auto';
+        document.querySelector('.login-container form').style.opacity = '1';
+    };
+    // Empêche la fermeture par clic en dehors ou sur la croix
+    document.getElementById('closeCguModal').onclick = function(e) {
+        e.preventDefault();
+        return false;
+    };
+    document.getElementById('cguModal').onclick = function(e) {
+        if (e.target === this) {
+            e.preventDefault();
+            return false;
+        }
+    };
+});
+</script>
 {% endblock %}
