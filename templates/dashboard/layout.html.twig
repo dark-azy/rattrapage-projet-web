@@ -33,9 +33,6 @@
 
                     {% if is_granted('ROLE_PILOTE') %}
                         <div class="section-title">Gestion</div>
-                        <a class="nav-link" href="{{ path('app_dashboard') }}">
-                            <i class="fas fa-home me-2"></i> Accueil
-                        </a>
                         <a class="nav-link" href="{{ path('app_promotions_stage') }}">
                             <i class="fas fa-graduation-cap me-2"></i> Gestion des Promotions
                         </a>
