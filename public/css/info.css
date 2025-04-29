@@ -9,35 +9,43 @@ body {
     background-color: #ffffff;
     color: #333;
     line-height: 1.6;
+    overflow-x: hidden; /* Évite les scrollbars horizontaux */
 }
 
 .container {
     display: flex;
+    flex-direction: row; /* Assurez-vous que c'est toujours en ligne */
     width: 100%;
     min-height: 100vh;
     margin-top: 10px;
     gap: 20px;
+    position: relative; /* Pour le positionnement */
 }
 
 .sidebar {
     position: sticky;
-    top : 10px;
+    top: 10px;
+    left: 0; /* Garantit que la sidebar reste à gauche */
     width: 300px;
     height: fit-content;
     padding: 20px;
     border: 1px solid #e0e0e0;
     border-radius: 5px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour le menu */
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0; /* Empêche la sidebar de rétrécir */
+    align-self: flex-start; /* Aligne la sidebar en haut */
+    z-index: 100; /* Valeur élevée pour s'assurer qu'elle est au-dessus */
+    background-color: #ffffff; /* Fond blanc pour la sidebar */
+    opacity: 1; /* Complètement opaque */
 }
 
 .content {
-    width: 75%;
-    height: fit-content;
+    flex: 1; /* Prend l'espace restant */
     padding: 20px 30px;
     border: 1px solid #e0e0e0;
     border-radius: 5px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour le menu */
-    margin-left: inherit;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1; /* Plus bas que la sidebar */
 }
 
 h1 {
@@ -60,7 +68,6 @@ h3 {
     font-weight: bold;
     color: #333;
 }
-
 
 p {
     margin-bottom: 20px;
@@ -112,30 +119,29 @@ strong {
 /* Tablettes (paysage) */
 @media screen and (max-width: 1024px) {
     .sidebar {
-        width: 190px; /* Réduire la largeur de la sidebar */
+        width: 190px;
         padding: 10px;
     }
 
     .content {
-        margin-left: 20px; /* Ajuster la marge gauche du contenu */
-        padding: 20px; /* Réduire légèrement le padding */
+        padding: 20px;
     }
 
     .container {
-        max-width: 960px; /* Limiter la largeur maximale du conteneur */
-        margin: 0 auto; /* Centrer le conteneur */
-        gap: 0;
+        gap: 10px;
         margin-top: 10px;
     }
+    
     .nav-side a {
         display: flex;
-        text-overflow: clip;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .nav-side li {
         margin: 2px 0;
     }
-
 }
 
 /* Tablettes (portrait) */
@@ -145,7 +151,6 @@ strong {
     }
 
     .content {
-        margin-left: 18px;
         padding: 15px 20px;
     }
 
@@ -162,30 +167,39 @@ strong {
 /* Smartphones (paysage) */
 @media screen and (max-width: 576px) {
     .container {
-        flex-direction: column;
+        flex-direction: column; /* Change en colonne uniquement sur petit écran */
     }
 
     .sidebar {
         position: sticky;
+        top: 0; /* Colle au sommet */
         width: 100%;
-        height: auto;
-        border-right: none;
+        z-index: 100;
+        background-color: #ffffff; /* Assuré que le fond blanc est bien appliqué */
         border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ombre plus visible */
     }
 
     .content {
-        margin-left: 0;
         width: 100%;
+        margin-top: 10px; /* Espace pour éviter le chevauchement */
     }
 
     .nav-side ul {
         display: flex;
         flex-wrap: wrap;
-        font-size: 10px;
     }
 
     .nav-side li {
         margin-right: 15px;
+        margin-bottom: 5px;
+    }
+    
+    .nav-side a {
+        font-size: 14px;
+        padding: 3px 5px; /* Padding pour agrandir la zone cliquable */
+        border-radius: 3px; /* Coins arrondis */
     }
 }
 
@@ -200,6 +214,15 @@ strong {
         margin-bottom: 20px;
     }
 
+    .sidebar {
+        padding: 10px;
+        /* Renforcement pour s'assurer que le contenu ne transparaît pas */
+        background: #ffffff;
+        -webkit-box-shadow: 0px 0px 10px 0px rgba(255,255,255,1);
+        -moz-box-shadow: 0px 0px 10px 0px rgba(255,255,255,1);
+        box-shadow: 0px 0px 10px 0px rgba(255,255,255,1);
+    }
+
     .nav-side ul {
         flex-direction: column;
     }
@@ -207,6 +230,10 @@ strong {
     .nav-side li {
         margin-right: 0;
         margin-bottom: 10px;
+    }
+    
+    .nav-side a {
+        font-size: 13px;
     }
 }
 
