@@ -3,7 +3,7 @@
 {% block dashboard_content %}
     <!-- Statistics Cards -->
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stats-card">
                 <h5>Étudiants</h5>
                 <div class="d-flex justify-content-between align-items-center">
@@ -13,7 +13,7 @@
                 <div class="mt-2 text-muted">Total des étudiants</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stats-card">
                 <h5>Pilotes</h5>
                 <div class="d-flex justify-content-between align-items-center">
@@ -23,7 +23,7 @@
                 <div class="mt-2 text-muted">Total des pilotes</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stats-card">
                 <h5>Entreprises</h5>
                 <div class="d-flex justify-content-between align-items-center">
@@ -33,30 +33,14 @@
                 <div class="mt-2 text-muted">Total des entreprises</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <h5>Offres de stage</h5>
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2 class="mb-0">{{ stats.offres }}</h2>
-                    <i class="fas fa-briefcase fa-2x text-warning"></i>
-                </div>
-                <div class="mt-2 text-muted">Total des offres</div>
-            </div>
-        </div>
     </div>
 
     <!-- Charts -->
     <div class="row mb-4">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="stats-card">
                 <h5>Distribution des étudiants par promotion</h5>
                 <canvas id="promotionsChart"></canvas>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="stats-card">
-                <h5>Offres de stage par mois</h5>
-                <canvas id="offresChart"></canvas>
             </div>
         </div>
     </div>
@@ -80,52 +64,6 @@
                     data: Object.values(distributionPromos),
                     backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
                 }]
-            }
-        });
-
-        // Noms des mois en français
-        const moisFrancais = {
-            '1': 'Janvier',
-            '2': 'Février',
-            '3': 'Mars',
-            '4': 'Avril',
-            '5': 'Mai',
-            '6': 'Juin',
-            '7': 'Juillet',
-            '8': 'Août',
-            '9': 'Septembre',
-            '10': 'Octobre',
-            '11': 'Novembre',
-            '12': 'Décembre'
-        };
-
-        // Graphique des offres
-        const offresParMois = {
-            {% for offre in offresParMois %}
-                "{{ offre.mois }}": {{ offre.nombre }},
-            {% endfor %}
-        };
-
-        new Chart(document.getElementById('offresChart'), {
-            type: 'line',
-            data: {
-                labels: Object.keys(offresParMois).map(mois => moisFrancais[mois]),
-                datasets: [{
-                    label: 'Nombre d\'offres',
-                    data: Object.values(offresParMois),
-                    borderColor: '#4e73df',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
             }
         });
 
