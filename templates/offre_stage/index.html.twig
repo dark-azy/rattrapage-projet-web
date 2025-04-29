@@ -32,7 +32,7 @@
                 data-id="{{ offre.id }}"
                 data-title="{{ offre.titreOffre }}"
                 data-company="{{ offre.entreprise.nom }}"
-                data-description="{{ offre.description }}"
+                data-description="{{ offre.descriptionOffre }}"
                 data-skills="{{ offre.competencesRequises }}"
                 data-duration="{{ offre.duree }}"
                 data-start-date="{{ offre.dateDebut|date('d/m/Y') }}"
@@ -48,7 +48,7 @@
                 </div>
                 
                 <div class="offer-company">{{ offre.entreprise.nom }}</div>
-                <div class="offer-description">{{ offre.description|slice(0, 150) }}...</div>
+                <div class="offer-description">{{ offre.descriptionOffre|slice(0, 150) }}...</div>
                 
                 <div class="offer-footer">
                     <div class="offer-location">

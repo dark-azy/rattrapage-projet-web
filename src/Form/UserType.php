@@ -33,6 +33,22 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
         ;
+
+        // Ajouter le champ roles seulement pour les administrateurs
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $builder->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Administrateur' => 'ROLE_ADMIN',
+                    'Pilote' => 'ROLE_PILOTE',
+                    'Étudiant' => 'ROLE_ETUDIANT',
+                    'Utilisateur' => 'ROLE_USER'
+                ],
+                'multiple' => true,
+                'expanded' => true,
+                'label' => 'Rôles',
+                'attr' => ['class' => 'form-check']
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

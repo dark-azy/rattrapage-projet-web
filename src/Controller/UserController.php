@@ -176,12 +176,28 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        if ($user instanceof \App\Entity\Administrateur) {
+            $form = $this->createForm(\App\Form\AdminType::class, $user);
+        } elseif ($user instanceof \App\Entity\PiloteDePromotion) {
+            $form = $this->createForm(\App\Form\PiloteType::class, $user);
+        } elseif ($user instanceof \App\Entity\Etudiant) {
+            $form = $this->createForm(\App\Form\EtudiantType::class, $user);
+        } else {
+            $form = $this->createForm(\App\Form\UserType::class, $user);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion du hash du mot de passe si un nouveau mot de passe est fourni
+            if ($form->has('password') && $form->get('password')->getData()) {
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                );
+                $user->setPassword($hashedPassword);
+            }
             $entityManager->flush();
 
             $this->addFlash('success', 'L\'utilisateur a été modifié avec succès.');

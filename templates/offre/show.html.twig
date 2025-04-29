@@ -1,0 +1,63 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Détail de l'offre de stage{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title mb-0">Détail de l'offre</h3>
+            <a href="{{ path('app_offres') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Informations générales</h5>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Titre</th>
+                                <td>{{ offre.titreOffre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Entreprise</th>
+                                <td>{{ offre.entreprise.nom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Durée</th>
+                                <td>{{ offre.dureeStage }} semaines</td>
+                            </tr>
+                            <tr>
+                                <th>Date de début</th>
+                                <td>{{ offre.dateDebutStage ? offre.dateDebutStage|date('d/m/Y') : 'Non définie' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Statut</th>
+                                <td>
+                                    <span class="badge {% if offre.statutOffre == 'Disponible' %}bg-success{% else %}bg-warning{% endif %}">
+                                        {{ offre.statutOffre }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="mb-3">Description</h5>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            {{ offre.descriptionOffre|nl2br }}
+                        </div>
+                    </div>
+                    <h5 class="mb-3">Compétences requises</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            {{ offre.competencesRequises|nl2br }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

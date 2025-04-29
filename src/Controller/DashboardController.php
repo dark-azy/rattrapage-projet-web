@@ -25,11 +25,18 @@ class DashboardController extends AbstractController
                 'etudiants' => $entityManager->getRepository(Etudiant::class)->count([]),
                 'pilotes' => $entityManager->getRepository(PiloteDePromotion::class)->count([]),
                 'entreprises' => $entityManager->getRepository(Entreprise::class)->count([]),
-                'offres' => $entityManager->getRepository(OffreDeStage::class)->count([])
+                'offres' => $entityManager->getRepository(OffreDeStage::class)->count([]),
+                'candidatures' => $entityManager->getRepository(Candidature::class)->count([]),
+                'promotions' => $entityManager->getRepository(Promotion::class)->count([])
             ];
 
             // Liste des étudiants avec leurs promotions
-            $etudiants = $entityManager->getRepository(Etudiant::class)->findAll();
+            $etudiants = $entityManager->getRepository(Etudiant::class)
+                ->createQueryBuilder('e')
+                ->leftJoin('e.promotion', 'p')
+                ->addSelect('p')
+                ->getQuery()
+                ->getResult();
             
             // Distribution des étudiants par promotion
             $promotions = $entityManager->getRepository(Promotion::class)->findAll();
@@ -58,21 +65,54 @@ class DashboardController extends AbstractController
                 ];
             }
 
+            // Récupérer les dernières candidatures
+            $dernieresCandidatures = $entityManager->getRepository(Candidature::class)
+                ->createQueryBuilder('c')
+                ->leftJoin('c.etudiant', 'e')
+                ->leftJoin('c.offreDeStage', 'o')
+                ->addSelect('e', 'o')
+                ->orderBy('c.date_candidature', 'DESC')
+                ->setMaxResults(5)
+                ->getQuery()
+                ->getResult();
+
             return $this->render('dashboard/admin.html.twig', [
                 'stats' => $stats,
                 'etudiants' => $etudiants,
                 'distributionPromos' => $distributionPromos,
-                'offresParMois' => $offresParMoisFormatted
+                'offresParMois' => $offresParMoisFormatted,
+                'dernieresCandidatures' => $dernieresCandidatures
             ]);
 
         } elseif ($this->isGranted('ROLE_PILOTE')) {
+            /** @var \App\Entity\PiloteDePromotion $pilote */
             $pilote = $this->getUser();
             
             // Statistiques pour le pilote
             $stats = [
-                'etudiants' => $entityManager->getRepository(Etudiant::class)->count([]),
-                'offres' => count($pilote->getOffresDeStage([])),
-                'entreprises' => $entityManager->getRepository(Entreprise::class)->count([]),
+                'etudiants' => $entityManager->getRepository(Etudiant::class)
+                    ->createQueryBuilder('e')
+                    ->join('e.promotion', 'p')
+                    ->where('p.pilote = :pilote')
+                    ->setParameter('pilote', $pilote)
+                    ->select('COUNT(e.id)')
+                    ->getQuery()
+                    ->getSingleScalarResult(),
+                'offres' => $entityManager->getRepository(OffreDeStage::class)
+                    ->createQueryBuilder('o')
+                    ->where('o.pilote = :pilote')
+                    ->setParameter('pilote', $pilote)
+                    ->select('COUNT(o.id)')
+                    ->getQuery()
+                    ->getSingleScalarResult(),
+                'entreprises' => $entityManager->getRepository(Entreprise::class)
+                    ->createQueryBuilder('e')
+                    ->join('e.offresDeStage', 'o')
+                    ->where('o.pilote = :pilote')
+                    ->setParameter('pilote', $pilote)
+                    ->select('COUNT(DISTINCT e.id)')
+                    ->getQuery()
+                    ->getSingleScalarResult(),
                 'etudiantsEnStage' => $entityManager->getRepository(Etudiant::class)
                     ->createQueryBuilder('e')
                     ->join('e.promotion', 'p')
@@ -80,29 +120,56 @@ class DashboardController extends AbstractController
                     ->andWhere('e.statut = :statut')
                     ->setParameter('pilote', $pilote)
                     ->setParameter('statut', 'En stage')
+                    ->select('COUNT(e.id)')
                     ->getQuery()
-                    ->getResult()
+                    ->getSingleScalarResult(),
+                'candidaturesEnAttente' => $entityManager->getRepository(Candidature::class)
+                    ->createQueryBuilder('c')
+                    ->join('c.etudiant', 'e')
+                    ->join('e.promotion', 'p')
+                    ->where('p.pilote = :pilote')
+                    ->andWhere('c.statut = :statut')
+                    ->setParameter('pilote', $pilote)
+                    ->setParameter('statut', 'En attente')
+                    ->select('COUNT(c.id)')
+                    ->getQuery()
+                    ->getSingleScalarResult()
             ];
 
-            // Récupérer les étudiants du pilote
+            // Récupérer les étudiants du pilote avec leurs candidatures
             $etudiants = $entityManager->getRepository(Etudiant::class)
                 ->createQueryBuilder('e')
                 ->join('e.promotion', 'p')
+                ->leftJoin('e.candidatures', 'c')
+                ->addSelect('c')
                 ->where('p.pilote = :pilote')
                 ->setParameter('pilote', $pilote)
                 ->getQuery()
                 ->getResult();
 
-            // Récupérer les offres de stage du pilote
+            // Récupérer les offres de stage du pilote avec leurs candidatures
             $offres = $entityManager->getRepository(OffreDeStage::class)
-                ->findBy(['pilote' => $pilote]);
+                ->createQueryBuilder('o')
+                ->leftJoin('o.candidatures', 'c')
+                ->addSelect('c')
+                ->where('o.pilote = :pilote')
+                ->setParameter('pilote', $pilote)
+                ->getQuery()
+                ->getResult();
 
-            // Récupérer les entreprises
-            $entreprises = $entityManager->getRepository(Entreprise::class)->findAll();
+            // Récupérer les entreprises liées aux offres du pilote
+            $entreprises = $entityManager->getRepository(Entreprise::class)
+                ->createQueryBuilder('e')
+                ->join('e.offresDeStage', 'o')
+                ->where('o.pilote = :pilote')
+                ->setParameter('pilote', $pilote)
+                ->getQuery()
+                ->getResult();
             
             // Distribution des étudiants par promotion pour le pilote
             $distributionPromos = [];
-            foreach ($pilote->getPromotions() as $promotion) {
+            $promotions = $pilote->getPromotions();
+            foreach ($promotions as $promotion) {
                 $distributionPromos[$promotion->getNom()] = count($promotion->getEtudiants());
             }
             
@@ -133,16 +200,32 @@ class DashboardController extends AbstractController
             }
             $offresParMois = array_reverse($offresParMois);
 
+            // Récupérer les dernières candidatures pour les promotions du pilote
+            $dernieresCandidatures = $entityManager->getRepository(Candidature::class)
+                ->createQueryBuilder('c')
+                ->join('c.etudiant', 'e')
+                ->join('e.promotion', 'p')
+                ->leftJoin('c.offreDeStage', 'o')
+                ->addSelect('e', 'o')
+                ->where('p.pilote = :pilote')
+                ->setParameter('pilote', $pilote)
+                ->orderBy('c.date_candidature', 'DESC')
+                ->setMaxResults(5)
+                ->getQuery()
+                ->getResult();
+
             return $this->render('dashboard/pilote.html.twig', [
                 'stats' => $stats,
                 'etudiants' => $etudiants,
                 'offres' => $offres,
                 'entreprises' => $entreprises,
                 'distributionPromos' => $distributionPromos,
-                'offresParMois' => $offresParMois
+                'offresParMois' => $offresParMois,
+                'dernieresCandidatures' => $dernieresCandidatures
             ]);
 
         } elseif ($this->isGranted('ROLE_ETUDIANT')) {
+            /** @var \App\Entity\Etudiant $etudiant */
             $etudiant = $this->getUser();
             
             // Statistiques pour l'étudiant
@@ -153,21 +236,57 @@ class DashboardController extends AbstractController
                     ->count(['etudiant' => $etudiant, 'statut' => 'Entretien']),
                 'offresDisponibles' => $entityManager->getRepository(OffreDeStage::class)
                     ->count(['statut_offre' => 'Disponible']),
-                'wishlist' => 0 // À implémenter avec la fonctionnalité wishlist
+                'candidaturesAcceptees' => $entityManager->getRepository(Candidature::class)
+                    ->count(['etudiant' => $etudiant, 'statut' => 'Acceptée']),
+                'candidaturesEnAttente' => $entityManager->getRepository(Candidature::class)
+                    ->count(['etudiant' => $etudiant, 'statut' => 'En attente']),
+                'candidaturesRefusees' => $entityManager->getRepository(Candidature::class)
+                    ->count(['etudiant' => $etudiant, 'statut' => 'Refusée'])
             ];
 
-            // Récupérer les offres disponibles
+            // Récupérer les offres disponibles avec leurs entreprises
             $offres = $entityManager->getRepository(OffreDeStage::class)
-                ->findBy(['statut_offre' => 'Disponible']);
+                ->createQueryBuilder('o')
+                ->leftJoin('o.entreprise', 'e')
+                ->addSelect('e')
+                ->where('o.statut_offre = :statut')
+                ->setParameter('statut', 'Disponible')
+                ->orderBy('o.datePublication', 'DESC')
+                ->setMaxResults(5)
+                ->getQuery()
+                ->getResult();
 
-            // Récupérer les candidatures de l'étudiant
+            // Récupérer les candidatures de l'étudiant avec les offres et entreprises
             $candidatures = $entityManager->getRepository(Candidature::class)
-                ->findBy(['etudiant' => $etudiant]);
+                ->createQueryBuilder('c')
+                ->leftJoin('c.offreDeStage', 'o')
+                ->leftJoin('o.entreprise', 'e')
+                ->addSelect('o', 'e')
+                ->where('c.etudiant = :etudiant')
+                ->setParameter('etudiant', $etudiant)
+                ->orderBy('c.date_candidature', 'DESC')
+                ->getQuery()
+                ->getResult();
+
+            // Récupérer les offres recommandées (basées sur la promotion de l'étudiant)
+            $offresRecommandees = $entityManager->getRepository(OffreDeStage::class)
+                ->createQueryBuilder('o')
+                ->leftJoin('o.entreprise', 'e')
+                ->addSelect('e')
+                ->where('o.statut_offre = :statut')
+                ->andWhere('o.promotion = :promotion')
+                ->setParameter('statut', 'Disponible')
+                ->setParameter('promotion', $etudiant->getPromotion())
+                ->orderBy('o.datePublication', 'DESC')
+                ->setMaxResults(3)
+                ->getQuery()
+                ->getResult();
 
             return $this->render('dashboard/etudiant.html.twig', [
                 'stats' => $stats,
                 'offres' => $offres,
-                'candidatures' => $candidatures
+                'candidatures' => $candidatures,
+                'offresRecommandees' => $offresRecommandees
             ]);
         }
 
