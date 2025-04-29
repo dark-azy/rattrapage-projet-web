@@ -360,5 +360,195 @@
 
 .candidature-card.removing {
     animation: slideOut 0.3s ease-out forwards;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.accordion {
+    margin-top: 20px;
+}
+
+.accordion-item {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.accordion-header {
+    background-color: #f8f9fa;
+}
+
+.accordion-button {
+    width: 100%;
+    padding: 15px;
+    text-align: left;
+    background-color: #f8f9fa;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.accordion-button:hover {
+    background-color: #e9ecef;
+}
+
+.accordion-body {
+    padding: 15px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.bg-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.bg-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.bg-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.bg-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.table th, .table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.text-muted {
+    color: #6c757d;
+}
+
+/* Règles pour les écrans de petite taille */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .accordion-button {
+        font-size: 0.9em;
+    }
+
+    .badge {
+        font-size: 0.8em;
+    }
+}
+
+/* Règles pour les écrans de taille moyenne */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+    }
+}
+
+/* Règles pour les écrans de grande taille */
+@media (min-width: 1025px) {
+    .container {
+        padding: 20px;
+    }
 } 
  
