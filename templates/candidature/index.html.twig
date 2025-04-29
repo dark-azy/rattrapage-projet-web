@@ -81,6 +81,77 @@
             color: white;
             transform: translateY(-1px);
         }
+        .note-btn {
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            min-width: 40px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff3e0;
+            border: none;
+            cursor: pointer;
+            color: #f57c00;
+            transition: all 0.2s;
+        }
+        .note-btn:hover {
+            background-color: #f57c00;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        /* Styles pour la modal de notation */
+        .rating-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .rating-modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 30%;
+            max-width: 400px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .rating-star {
+            font-size: 30px;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+        .rating-star.active {
+            color: #f57c00;
+        }
+        .rating-submit {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #f57c00;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .rating-submit:hover {
+            background-color: #e65100;
+        }
     </style>
 {% endblock %}
 
@@ -127,9 +198,16 @@
                                 {{ candidature.statut }}
                             </div>
                         </div>
-                        <button class="view-btn" title="Voir les détails">
-                            👁️
-                        </button>
+                        <div class="application-actions">
+                            <button class="view-btn" title="Voir les détails">
+                                👁️
+                            </button>
+                            {% if candidature.statut == 'Acceptée' %}
+                                <button class="note-btn" title="Noter l'entreprise">
+                                    ⭐
+                                </button>
+                            {% endif %}
+                        </div>
                     </div>
                 {% else %}
                     <div class="no-applications">
@@ -167,6 +245,27 @@
             </div>
         </div>
     </div>
+
+    {# Modal pour la notation #}
+    <div id="ratingModal" class="rating-modal">
+        <div class="rating-modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Noter l'entreprise</h2>
+            <p id="ratingCompanyName"></p>
+            <form id="ratingForm" method="POST" action="{{ path('app_note_create') }}">
+                <input type="hidden" name="entreprise_id" id="ratingEntrepriseId">
+                <div class="rating-stars">
+                    <span class="rating-star" data-value="1">★</span>
+                    <span class="rating-star" data-value="2">★</span>
+                    <span class="rating-star" data-value="3">★</span>
+                    <span class="rating-star" data-value="4">★</span>
+                    <span class="rating-star" data-value="5">★</span>
+                </div>
+                <input type="hidden" name="valeur" id="ratingValue">
+                <button type="submit" class="rating-submit">Valider la note</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -176,6 +275,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('offerModal');
+            const closeModalBtn = document.querySelector('.close-modal');
 
             // Fonction pour ouvrir la modal avec les détails de l'offre
             function openModal(card) {
@@ -208,7 +308,7 @@
             }
 
             // Fermer la modal en cliquant sur la croix
-            document.querySelector('.close-modal').onclick = closeModal;
+            closeModalBtn.onclick = closeModal;
 
             // Fermer la modal en cliquant en dehors
             window.onclick = function(event) {
@@ -220,9 +320,103 @@
             // Ajouter les événements de clic sur les boutons de vue
             document.querySelectorAll('.view-btn').forEach(button => {
                 button.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Empêcher la propagation du clic
+                    e.preventDefault();
+                    e.stopPropagation();
                     const card = this.closest('.application-card');
                     openModal(card);
+                });
+            });
+
+            // Gestion de la modal de notation
+            const ratingModal = document.getElementById('ratingModal');
+            const ratingStars = document.querySelectorAll('.rating-star');
+            const ratingValue = document.getElementById('ratingValue');
+            let selectedRating = 0;
+
+            // Fonction pour ouvrir la modal de notation
+            function openRatingModal(card) {
+                document.getElementById('ratingCompanyName').textContent = card.dataset.company;
+                document.getElementById('ratingEntrepriseId').value = card.dataset.id;
+                ratingModal.style.display = 'block';
+                selectedRating = 0;
+                updateStars();
+            }
+
+            // Fonction pour fermer la modal de notation
+            function closeRatingModal() {
+                ratingModal.style.display = 'none';
+            }
+
+            // Gestion des étoiles de notation
+            function updateStars() {
+                ratingStars.forEach(star => {
+                    if (parseInt(star.dataset.value) <= selectedRating) {
+                        star.classList.add('active');
+                    } else {
+                        star.classList.remove('active');
+                    }
+                });
+                ratingValue.value = selectedRating;
+            }
+
+            ratingStars.forEach(star => {
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.dataset.value);
+                    updateStars();
+                });
+            });
+
+            // Fermer la modal en cliquant sur la croix
+            document.querySelector('#ratingModal .close-modal').onclick = closeRatingModal;
+
+            // Fermer la modal en cliquant en dehors
+            window.onclick = function(event) {
+                if (event.target == ratingModal) {
+                    closeRatingModal();
+                }
+            }
+
+            // Ajouter les événements de clic sur les boutons de notation
+            document.querySelectorAll('.note-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const card = this.closest('.application-card');
+                    openRatingModal(card);
+                });
+            });
+
+            // Gestion de la soumission du formulaire
+            document.getElementById('ratingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (selectedRating === 0) {
+                    alert('Veuillez sélectionner une note');
+                    return;
+                }
+
+                const formData = new FormData(this);
+                formData.append('valeur', selectedRating);
+                formData.append('nom_entreprise', document.getElementById('ratingCompanyName').textContent);
+
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        closeRatingModal();
+                        // Rafraîchir la page pour mettre à jour l'interface
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Une erreur est survenue lors de l\'envoi de votre note');
                 });
             });
         });
