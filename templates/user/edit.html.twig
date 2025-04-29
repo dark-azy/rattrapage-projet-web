@@ -30,18 +30,13 @@
                         </div>
                     </div>
 
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                {{ form_row(form.roles) }}
-                            </div>
-                        </div>
-                    {% endif %}
-
                     <div class="row">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary">Enregistrer</button>
                             <a href="{{ path('app_users') }}" class="btn btn-secondary">Retour à la liste</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_user_delete', {'id': user.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</a>
+                            {% endif %}
                         </div>
                     </div>
                 {{ form_end(form) }}
